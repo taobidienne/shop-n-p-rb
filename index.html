@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RB SHOP</title>
+
+<style>
+
+body{
+margin:0;
+padding:20px;
+font-family:Arial;
+background:#0b0b0b;
+color:white;
+}
+
+.title{
+text-align:center;
+font-size:40px;
+color:gold;
+text-shadow:0 0 20px gold;
+margin-bottom:20px;
+}
+
+.card{
+background:#151515;
+padding:20px;
+border-radius:20px;
+margin-bottom:15px;
+border:1px solid #222;
+}
+
+.input{
+width:100%;
+padding:12px;
+margin:8px 0;
+border-radius:12px;
+border:none;
+background:#222;
+color:white;
+outline:none;
+}
+
+button{
+padding:10px 16px;
+border:none;
+border-radius:999px;
+cursor:pointer;
+font-weight:bold;
+margin-top:8px;
+background:linear-gradient(45deg,gold,orange);
+color:black;
+}
+
+button:active{
+transform:scale(0.95);
+}
+
+.status{
+padding:5px 10px;
+border-radius:999px;
+font-size:12px;
+cursor:pointer;
+margin-left:5px;
+}
+
+.pending{background:orange;color:black;}
+.success{background:lime;color:black;}
+
+</style>
+</head>
+<body>
+
+<div class="title">💎 RB SHOP</div>
+
+<div class="card">
+<h2>💰 SỐ DƯ: <span id="money">0</span>đ</h2>
+</div>
+
+<div class="card">
+<h2>🔐 ADMIN LOGIN</h2>
+<input id="adminPass" class="input" placeholder="Nhập mật khẩu admin">
+<button onclick="loginAdmin()">Đăng nhập admin</button>
+</div>
+
+<div class="card">
+<h2>💳 NẠP THẺ</h2>
+
+<input id="name" class="input" placeholder="Tên">
+<input id="card" class="input" placeholder="Mã thẻ">
+<input id="seri" class="input" placeholder="Seri">
+
+<select id="moneyCard" class="input">
+<option value="20000">20K</option>
+<option value="50000">50K</option>
+<option value="100000">100K</option>
+</select>
+
+<button onclick="napThe()">Nạp thẻ</button>
+</div>
+
+<div class="card">
+<h2>💎 MUA ROBUX</h2>
+
+<input id="rb" class="input" placeholder="Nhập số RB">
+
+<button onclick="buyRb()">Mua RB</button>
+</div>
+
+<div class="card">
+<h2>📜 LỊCH SỬ</h2>
+<div id="history">Chưa có giao dịch 😆</div>
+</div>
+
+<script>
+
+let money = 0;
+let admin = false;
+
+function showEffect(text){
+
+let d=document.createElement("div");
+
+d.innerText=text;
+
+d.style.position="fixed";
+d.style.top="50%";
+d.style.left="50%";
+d.style.transform="translate(-50%,-50%)";
+d.style.background="gold";
+d.style.padding="20px";
+d.style.borderRadius="15px";
+d.style.fontWeight="bold";
+d.style.zIndex="9999";
+
+document.body.appendChild(d);
+
+setTimeout(()=>d.remove(),1200);
+
+}
+
+function loginAdmin(){
+
+let pass=document.getElementById("adminPass").value;
+
+if(pass==="admin123"){
+admin=true;
+showEffect("ADMIN ON 🔥");
+}else{
+showEffect("SAI PASS 😆");
+}
+
+}
+
+function changeStatus(el){
+
+if(!admin){
+showEffect("CHỈ ADMIN 😆");
+return;
+}
+
+let choice = prompt(
+"Chọn trạng thái:\n1 = Thành công\n2 = Không thành công"
+);
+
+if(choice=="1"){
+
+el.innerText="Thành công";
+el.className="status success";
+showEffect("DUYỆT OK 🔥");
+
+}else if(choice=="2"){
+
+el.innerText="Không thành công";
+el.className="status pending";
+el.style.background="red";
+el.style.color="white";
+showEffect("HUỶ ĐƠN ❌");
+
+}else{
+
+showEffect("HUỶ");
+
+}
+
+}
+
+function napThe(){
+
+let name=document.getElementById("name").value;
+let card=document.getElementById("card").value;
+let seri=document.getElementById("seri").value;
+let val=parseInt(document.getElementById("moneyCard").value);
+
+if(!name||!card||!seri){
+showEffect("NHẬP ĐẦY ĐỦ 😭");
+return;
+}
+
+money+=val;
+document.getElementById("money").innerText=money;
+
+document.getElementById("history").innerHTML+=
+`<br>👤 ${name} +${val}
+ <span class="status pending"
+ onclick="changeStatus(this)">
+Đang xử lý
+</span>`;
+
+showEffect("NẠP OK 🔥");
+
+}
+
+function buyRb(){
+
+let rb=parseInt(document.getElementById("rb").value)||0;
+let price=rb*500;
+
+if(price>money){
+showEffect("KHÔNG ĐỦ TIỀN 😭");
+return;
+}
+
+money-=price;
+document.getElementById("money").innerText=money;
+
+document.getElementById("history").innerHTML+=
+`<br>💎 ${rb} RB - ${price}
+ <span class="status pending"
+ onclick="changeStatus(this)">
+Đang xử lý
+</span>`;
+
+showEffect("MUA RB OK 😎");
+
+}
+
+</script>
+
+</body>
+</html>
